@@ -11,6 +11,7 @@
   "scripts": {
     "test": "jest --no-cache --coverage",
     "start": "serverless offline start",
+    "debug": "SET SLS_DEBUG=* && node --inspect=9080 %USERPROFILE%\\AppData\\Roaming\\npm\\node_modules\\serverless\\bin\\serverless offline start",
     "postinstall": "serverless dynamodb install",
     "deploy-prod": "serverless --stage=production deploy"
   },
@@ -27,20 +28,28 @@
     "mapCoverage": true
   },
   "dependencies": {
-    "apollo-server-lambda": "^2.9.12",
-    "apollo-tracing": "0.8.8",
+    "@types/compression": "^1.0.1",
+    "@types/crypto-js": "^3.1.43",
+    "@types/pako": "^1.0.1",
+    "aws-lambda": "^0.1.2",
+    "compression": "^1.7.4",
+    "crypto-js": "^3.1.9-1",
     "dotenv": "^8.2.0",
+    "file-type": "^12.4.0",
     "graphql": "^14.5.8",
     "graphql-playground-middleware-lambda": "^1.7.13",
     "graphql-tag": "^2.10.1",
     "graphql-tools": "^4.0.6",
     "jest-transform-graphql": "^2.1.0",
-    "serverless-dynamodb-client": "0.0.2"
+    "pako": "^1.0.10",
+    "serverless-dynamodb-client": "0.0.2",
+    "sharp": "^0.23.3"
   },
   "devDependencies": {
     "@types/aws-lambda": "8.10.36",
     "@types/graphql": "^14.5.0",
     "@types/node": "^12.12.14",
+    "@types/sharp": "^0.23.0",
     "@typescript-eslint/eslint-plugin": "^2.9.0",
     "@typescript-eslint/parser": "^2.9.0",
     "aws-sdk": "^2.580.0",

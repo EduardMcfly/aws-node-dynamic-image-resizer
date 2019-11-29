@@ -7,6 +7,10 @@ provider:
   runtime: nodejs6.10
   stage: dev
   region: us-east-1
+  environment:
+    DYNAMODB_TABLE: ${self:service}-${opt:stage, self:provider.stage}
+    AWS_ACCESS_KEY_ID: AKIAIOLMTMR3KTDDC52Q
+    AWS_SECRET_ACCESS_KEY: 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
   iamRoleStatements:
     - Effect: Allow
       Action:
@@ -35,14 +39,24 @@ custom:
       migrate: true
 
 functions:
-  graphql:
-    handler: src/handler.default
+  uploadFile:
+    handler: src/handler.uploadFile
     events:
       - http:
-          path: graphql
+          path: uploadFile
           method: post
           cors: true
+  getFile:
+    handler: src/handler.getFile
+    events:
       - http:
-          path: graphql
+          path: getFile
+          method: get
+          cors: true
+  getImage:
+    handler: src/handler.getImage
+    events:
+      - http:
+          path: getImage
           method: get
           cors: true
