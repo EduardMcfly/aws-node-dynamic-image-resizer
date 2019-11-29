@@ -1,14 +1,7 @@
 import 'dotenv/config';
-import { ApolloServer, gql } from 'apollo-server-lambda';
+import { ApolloServer } from 'apollo-server-lambda';
 import { resolvers } from 'src/resolvers';
-
-// Construct a schema, using GraphQL schema language
-const typeDefs = gql`
-  type Query {
-    hello: String
-    bye: String
-  }
-`;
+import typeDefs from 'src/schema';
 
 const server = new ApolloServer({
   typeDefs,
