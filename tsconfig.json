@@ -2,7 +2,7 @@
   "compilerOptions": {
     "allowJs": true,
     "allowSyntheticDefaultImports": true,
-    "baseUrl": ".",
+    "baseUrl": "src",
     "experimentalDecorators": true,
     "forceConsistentCasingInFileNames": true,
     "lib": ["es6"],
@@ -18,7 +18,10 @@
     "suppressImplicitAnyIndexErrors": true,
     "target": "es5",
     "paths": {
-      "*": ["*"]
+      "@resolvers/*": ["resolvers/*"],
+      "@schema/*": ["schema/*"],
+      "@resolvers": ["resolvers/index"],
+      "@schema": ["schema/index"]
     }
   },
   "exclude": [
