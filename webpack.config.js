@@ -11,10 +11,7 @@ module.exports = {
     enforceExtension: false,
   },
   module: {
-    rules: [
-      { test: /\.ts(x?)$/, loader: 'ts-loader' },
-      { test: /\.graphql|gql?$/, loader: 'webpack-graphql-loader' },
-    ],
+    rules: [{ test: /\.ts(x?)$/, loader: 'ts-loader' }],
   },
   output: {
     libraryTarget: 'commonjs',
