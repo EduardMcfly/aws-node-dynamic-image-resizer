@@ -1,0 +1,72 @@
+{
+  "name": "serverless-graphql-typescript",
+  "description": "A starting template for creating React16, Redux, GraphQL, Serverless and TypeScript powered mobile apps.",
+  "author": "CauseCode Technologies",
+  "license": "Apache-2.0",
+  "version": "0.0.1",
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:causecode/serverless-graphql-typescript.git"
+  },
+  "scripts": {
+    "test": "jest --no-cache --coverage",
+    "start": "serverless offline start",
+    "postinstall": "serverless dynamodb install",
+    "deploy-prod": "serverless --stage=production deploy"
+  },
+  "jest": {
+    "transform": {
+      "^.+\\.ts?$": "./node_modules/ts-jest/preprocessor.js",
+      "\\.(gql|graphql)$": "jest-transform-graphql"
+    },
+    "testRegex": "(/__tests__/.*|(\\.|/)(test|spec))\\.(ts?)$",
+    "moduleFileExtensions": [
+      "ts",
+      "js"
+    ],
+    "mapCoverage": true
+  },
+  "dependencies": {
+    "apollo-server-lambda": "^2.9.12",
+    "apollo-tracing": "0.8.8",
+    "babel-polyfill": "6.26.0",
+    "dotenv": "^8.2.0",
+    "eslint-config-prettier": "^6.7.0",
+    "eslint-plugin-prettier": "^3.1.1",
+    "graphql": "^14.5.8",
+    "graphql-playground-middleware-lambda": "^1.7.13",
+    "graphql-tag": "^2.10.1",
+    "graphql-tools": "^4.0.6",
+    "jest-transform-graphql": "^2.1.0",
+    "serverless-dynamodb-client": "0.0.2"
+  },
+  "devDependencies": {
+    "@types/aws-lambda": "8.10.36",
+    "@types/graphql": "^14.5.0",
+    "@types/node": "^12.12.14",
+    "@typescript-eslint/eslint-plugin": "^2.9.0",
+    "@typescript-eslint/parser": "^2.9.0",
+    "aws-sdk": "^2.580.0",
+    "babel-core": "^6.26.3",
+    "babel-loader": "^8.0.6",
+    "babel-preset-env": "^1.7.0",
+    "body-parser": "^1.19.0",
+    "cors": "^2.8.5",
+    "eslint": "^6.7.1",
+    "eslint-config-google": "^0.14.0",
+    "faker": "4.1.0",
+    "imports-loader": "^0.8.0",
+    "jest": "^24.9.0",
+    "jsonfile": "^5.0.0",
+    "prettier": "^1.19.1",
+    "serverless-dynamodb-local": "^0.2.38",
+    "serverless-offline": "^5.12.0",
+    "serverless-webpack": "^5.3.1",
+    "ts-jest": "^24.2.0",
+    "ts-loader": "^6.2.1",
+    "typescript": "^3.7.2",
+    "webpack": "^4.41.2",
+    "webpack-graphql-loader": "^1.0.2",
+    "webpack-node-externals": "^1.7.2"
+  }
+}
