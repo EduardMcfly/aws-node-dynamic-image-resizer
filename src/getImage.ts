@@ -29,7 +29,9 @@ export const getImage: APIGatewayProxyHandler = async ({
           (image): APIGatewayProxyResult => {
             return {
               statusCode: 200,
-              body: encrypt(image.toString('base64')),
+              body: encrypt(
+                JSON.stringify({ file: image.toString('base64') }),
+              ),
             };
           },
         )
