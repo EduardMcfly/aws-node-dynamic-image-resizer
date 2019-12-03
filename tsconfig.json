@@ -28,5 +28,5 @@
     "src/setupTests.ts",
     "src/__tests__"
   ],
-  "include": ["src/**/*", "src/**/*.json", "src/images.d.ts"]
+  "include": ["src", "src/images.d.ts"]
 }
