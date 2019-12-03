@@ -10,7 +10,7 @@ webpackIncludeModules: true
 webpack:
   packagerOptions:
     scripts:
-      # - npm uni sharp && npm i --arch=x64 --platform=linux --target=10.15.0 sharp && npm i --arch=x64 --platform=linux
+      - npm uni sharp && npm i --arch=x64 --platform=linux --target=10.15.0 sharp
 # dynamodb:
 #   start:
 #     port: 8000
