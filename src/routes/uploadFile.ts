@@ -1,46 +1,44 @@
-/* import { awsS3, BUCKET } from 'utils/awsS3'; */
-import { APIGatewayProxyHandler } from 'aws-lambda';
-import pako from 'pako';
-import { AES, enc } from 'crypto-js';
-// Uploading files to the bucket
+import { awsS3, BUCKET } from 'utils/awsS3';
+import {
+  APIGatewayProxyHandler,
+  APIGatewayProxyResult,
+} from 'aws-lambda';
+import fileType from 'file-type';
+import { decrypt } from 'utils/encryption';
 
-const KEY = 'test';
-export const decrypt = (text: string) =>
-  AES.decrypt(
-    pako.inflate(text, {
-      to: 'string',
-    }),
-    KEY,
-  ).toString(enc.Utf8);
-
-export const encrypt = (text: string) =>
-  pako.deflate(AES.encrypt(text, KEY).toString(), {
-    to: 'string',
-  });
-
-export const uploadFile: APIGatewayProxyHandler = (
+export const uploadFile: APIGatewayProxyHandler = async (
   event,
   context,
-  callback,
 ) => {
   const { body } = event;
-  callback(null, {
-    statusCode: 200,
-    body: decrypt(body),
-  });
-  /*  awsS3.upload(
-    {
+  if (!body)
+    return {
+      statusCode: 500,
+      body: JSON.stringify({ error: 'body null' }),
+    };
+
+  const { file, key } = JSON.parse(decrypt(body));
+  const buffer = new Buffer(file, 'base64');
+  const fileMime = fileType(buffer);
+  if (!fileMime) context.fail('The file is not');
+
+  return awsS3
+    .upload({
       Bucket: BUCKET,
-      Key: file, // File names you want to save as in S3
-      Body: readStream,
-    },
-    function(err: any, data: any) {
-      if (err) throw err;
-      console.log(`File uploaded successfully. ${data.Location}`);
-      resolve({
-        id,
-        filename: file,
-      });
-    },
-  ); */
+      Key: key, // File name you want to save as in S3
+      Body: buffer,
+    })
+    .promise()
+    .then(
+      (): APIGatewayProxyResult => ({
+        statusCode: 200,
+        body: 'success',
+      }),
+    )
+    .catch(
+      (e: Error): APIGatewayProxyResult => ({
+        statusCode: 500,
+        body: e.message,
+      }),
+    );
 };

@@ -2,46 +2,45 @@ import {
   APIGatewayProxyHandler,
   APIGatewayProxyResult,
 } from 'aws-lambda';
-import resize from '../utils/resize';
-import { getFileBucket } from '../utils/getFileBucket';
+import resize from 'utils/resize';
+import { getFileBucket } from 'utils/getFileBucket';
+import { encrypt } from 'utils/encryption';
+import { convertInt } from 'utils/index';
 
 export const getImage: APIGatewayProxyHandler = async ({
-  queryStringParameters,
+  queryStringParameters: parameters,
 }): Promise<APIGatewayProxyResult> => {
-  const { format, file } = queryStringParameters;
+  const { file, format } = parameters;
   // Parse to integer if possible
-  const width = parseInt(queryStringParameters.width);
-  const height = parseInt(queryStringParameters.height);
+  const width = convertInt(parameters.width);
+  const height = convertInt(parameters.height);
   if (!file) {
     return { statusCode: 500, body: 'Not autorized' };
   } else {
     const { Body } = await getFileBucket(file);
     if (Body instanceof Buffer) {
-      const res = await resize({
+      return resize({
         file: Body,
         format,
-        width: (!isNaN(width) && width) || undefined,
-        height: (!isNaN(height) && height) || undefined,
+        width,
+        height,
       })
         .then(
-          (image): APIGatewayProxyResult => ({
-            statusCode: 200,
-            headers: {
-              'content-type': `image/${format || 'jpeg'} `,
-            },
-            body: image.toString('base64'),
-            isBase64Encoded: true,
-          }),
+          (image): APIGatewayProxyResult => {
+            return {
+              statusCode: 200,
+              body: encrypt(image.toString('base64')),
+            };
+          },
         )
         .catch(
-          (e): APIGatewayProxyResult => {
+          ({ message: body }): APIGatewayProxyResult => {
             return {
               statusCode: 500,
-              body: e.message,
+              body,
             };
           },
         );
-      return res;
     } else {
       return { statusCode: 500, body: '' };
     }
