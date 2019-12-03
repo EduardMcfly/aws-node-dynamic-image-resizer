@@ -53,6 +53,13 @@ functions:
           path: getFile
           method: get
           cors: true
+  uploadImage:
+    handler: src/handler.uploadImage
+    events:
+      - http:
+          path: uploadImage
+          method: post
+          cors: true
   getImage:
     handler: src/handler.getImage
     events:
