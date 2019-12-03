@@ -14,7 +14,7 @@ export default async function resize({
   format,
   width,
   height,
-}: PropsResize) {
+}: PropsResize): Promise<Buffer> {
   let transform = sharp(file);
 
   if (format) {
@@ -30,6 +30,5 @@ export default async function resize({
       withoutEnlargement: true,
     });
   }
-  const buffer = await transform.toBuffer();
-  return buffer;
+  return transform.toBuffer().catch(e => e);
 }
