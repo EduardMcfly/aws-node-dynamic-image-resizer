@@ -1,0 +1,18 @@
+bucket: cosva
+dev:
+  ACCESS_KEY_ID: AKIAIOLMTMR3KTDDC52Q
+  SECRET_ACCESS_KEY: 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
+  DYNAMODB_TABLE: ${self:service}-${opt:stage, self:provider.stage}
+  BUCKET: ${self:custom.bucket}
+serverless-offline:
+  port: 4000
+webpackIncludeModules: true
+webpack:
+  packagerOptions:
+    scripts:
+      # - npm uni sharp && npm i --arch=x64 --platform=linux --target=10.15.0 sharp && npm i --arch=x64 --platform=linux
+# dynamodb:
+#   start:
+#     port: 8000
+#     inMemory: true
+#     migrate: true

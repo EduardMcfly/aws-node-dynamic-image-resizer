@@ -1,69 +1,63 @@
-service: serverless-graphql-typescript
+service: cosva-files
 
 frameworkVersion: '>=1.21.0 <2.0.0'
 
 provider:
   name: aws
-  runtime: nodejs6.10
-  stage: dev
+  runtime: nodejs10.x
+  stage: ${opt:stage, 'dev'}
   region: us-east-1
-  environment:
-    DYNAMODB_TABLE: ${self:service}-${opt:stage, self:provider.stage}
-    AWS_ACCESS_KEY_ID: AKIAIOLMTMR3KTDDC52Q
-    AWS_SECRET_ACCESS_KEY: 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
+  environment: ${self:custom.${self:provider.stage}}
   iamRoleStatements:
     - Effect: Allow
       Action:
-        - dynamodb:Query
-        - dynamodb:Scan
-        - dynamodb:GetItem
-        - dynamodb:BatchGetItem
-        - dynamodb:PutItem
-        - dynamodb:UpdateItem
-        - dynamodb:DeleteItem
-      Resource: 'arn:aws:dynamodb:us-east-1:*:table/*'
+        # - dynamodb:Query
+        # - dynamodb:Scan
+        # - dynamodb:GetItem
+        # - dynamodb:BatchGetItem
+        # - dynamodb:PutItem
+        # - dynamodb:UpdateItem
+        # - dynamodb:DeleteItem
+        - s3:PutObject
+        - s3:PutObjectAcl
+      Resource: 'arn:aws:s3:::${self:custom.bucket}/*'
 
 plugins:
   - serverless-webpack
-  - serverless-dynamodb-local
+  # - serverless-dynamodb-local
   - serverless-offline
 
-custom:
-  serverless-offline:
-    port: 4000
-  webpackIncludeModules: true
-  dynamodb:
-    start:
-      port: 8000
-      inMemory: true
-      migrate: true
+custom: ${file(./custom.yml)}
 
 functions:
   uploadFile:
-    handler: src/handler.uploadFile
+    handler: src/uploadFile.uploadFile
     events:
       - http:
           path: uploadFile
           method: post
           cors: true
   getFile:
-    handler: src/handler.getFile
+    handler: src/getFile.getFile
     events:
       - http:
           path: getFile
           method: get
           cors: true
   uploadImage:
-    handler: src/handler.uploadImage
+    handler: src/uploadImage.uploadImage
     events:
       - http:
           path: uploadImage
           method: post
           cors: true
   getImage:
-    handler: src/handler.getImage
+    handler: src/getImage.getImage
     events:
       - http:
           path: getImage
           method: get
           cors: true
+package:
+  include:
+    - .webpack/node_modules
