@@ -4,7 +4,6 @@ import {
 } from 'aws-lambda';
 import resize from 'utils/resize';
 import { getFileBucket } from 'utils/getFileBucket';
-import { encrypt } from 'utils/encryption';
 import { convertInt } from 'utils/index';
 
 export const getImage: APIGatewayProxyHandler = async ({
@@ -29,9 +28,9 @@ export const getImage: APIGatewayProxyHandler = async ({
           (image): APIGatewayProxyResult => {
             return {
               statusCode: 200,
-              body: encrypt(
-                JSON.stringify({ file: image.toString('base64') }),
-              ),
+              body: JSON.stringify({
+                file: image.toString('base64'),
+              }),
             };
           },
         )
