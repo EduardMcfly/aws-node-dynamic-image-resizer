@@ -4,7 +4,6 @@ import {
   APIGatewayProxyResult,
 } from 'aws-lambda';
 import fileType from 'file-type';
-import { decrypt } from 'utils/encryption';
 
 export const uploadFile: APIGatewayProxyHandler = async (
   event,
@@ -17,7 +16,7 @@ export const uploadFile: APIGatewayProxyHandler = async (
       body: JSON.stringify({ error: 'body null' }),
     };
 
-  const { file, key } = JSON.parse(decrypt(body));
+  const { file, key } = JSON.parse(body);
   const buffer = new Buffer(file, 'base64');
   const fileMime = fileType(buffer);
   if (!fileMime) context.fail('The file is not');

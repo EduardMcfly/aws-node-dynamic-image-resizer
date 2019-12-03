@@ -4,7 +4,6 @@ import {
   APIGatewayProxyResult,
 } from 'aws-lambda';
 import fileType from 'file-type';
-import { decrypt } from 'utils/encryption';
 import resize from 'utils/resize';
 import { convertInt } from 'utils/index';
 
@@ -21,7 +20,7 @@ export const uploadImage: APIGatewayProxyHandler = async (
         error: 'body null',
       }),
     };
-  const { key, file, format, ...rest } = JSON.parse(decrypt(body));
+  const { key, file, format, ...rest } = JSON.parse(body);
 
   const buffer = new Buffer(file, 'base64');
   // Parse to integer if possible
