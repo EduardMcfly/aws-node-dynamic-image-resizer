@@ -1,17 +1,8 @@
-import { awsS3, BUCKET } from 'utils/awsS3';
-import {
-  APIGatewayProxyHandler,
-  APIGatewayProxyResult,
-} from 'aws-lambda';
-import fileType from 'file-type';
+import { APIGatewayProxyHandler } from 'aws-lambda';
 import resize from 'utils/resize';
-import { convertInt } from 'utils/index';
+import { convertInt, uploadDynamoDB } from 'utils';
 
-export const uploadImage: APIGatewayProxyHandler = async (
-  event,
-  context,
-  callback,
-) => {
+export const uploadImage: APIGatewayProxyHandler = async event => {
   const { body } = event;
   if (!body)
     return {
@@ -27,27 +18,16 @@ export const uploadImage: APIGatewayProxyHandler = async (
   const width = convertInt(rest.width);
   const height = convertInt(rest.height);
 
-  const fileMime = fileType(buffer);
-  const Body = await resize({ file: buffer, width, height, format });
-  if (!fileMime) context.fail('The file is not');
+  const newFile = await resize({
+    file: buffer,
+    width,
+    height,
+    format,
+  });
 
-  return awsS3
-    .upload({
-      Bucket: BUCKET,
-      Key: key, // File name you want to save as in S3
-      Body,
-    })
-    .promise()
-    .then(
-      (): APIGatewayProxyResult => ({
-        statusCode: 200,
-        body: 'success',
-      }),
-    )
-    .catch(
-      (e: Error): APIGatewayProxyResult => ({
-        statusCode: 500,
-        body: e.message,
-      }),
-    );
+  // write the todo to the database
+  return uploadDynamoDB({
+    key: key,
+    file: newFile.toString('base64'),
+  });
 };

@@ -11,20 +11,22 @@ provider:
   iamRoleStatements:
     - Effect: Allow
       Action:
-        # - dynamodb:Query
-        # - dynamodb:Scan
-        # - dynamodb:GetItem
-        # - dynamodb:BatchGetItem
-        # - dynamodb:PutItem
-        # - dynamodb:UpdateItem
-        # - dynamodb:DeleteItem
         - s3:PutObject
         - s3:PutObjectAcl
       Resource: 'arn:aws:s3:::${self:custom.bucket}/*'
+    - Effect: Allow
+      Action:
+        - dynamodb:Query
+        - dynamodb:Scan
+        - dynamodb:GetItem
+        - dynamodb:PutItem
+        - dynamodb:UpdateItem
+        - dynamodb:DeleteItem
+      Resource: 'arn:aws:dynamodb:${opt:region, self:provider.region}:*:table/${self:provider.environment.DYNAMODB_TABLE}'
 
 plugins:
   - serverless-webpack
-  # - serverless-dynamodb-local
+  - serverless-dynamodb-local
   - serverless-offline
 
 custom: ${file(./custom.yml)}
@@ -61,3 +63,18 @@ functions:
 package:
   include:
     - .webpack/node_modules
+
+resources:
+  Resources:
+    TodosDynamoDbTable:
+      Type: 'AWS::DynamoDB::Table'
+      DeletionPolicy: Retain
+      Properties:
+        AttributeDefinitions:
+          - AttributeName: id
+            AttributeType: S
+        KeySchema:
+          - AttributeName: id
+            KeyType: HASH
+        BillingMode: PAY_PER_REQUEST
+        TableName: ${self:provider.environment.DYNAMODB_TABLE}

@@ -12,7 +12,7 @@
     "test": "jest --no-cache --coverage",
     "start": "serverless offline start",
     "debug": "SET SLS_DEBUG=* && node --inspect=9080 %USERPROFILE%\\AppData\\Roaming\\npm\\node_modules\\serverless\\bin\\serverless offline start",
-    "_postinstall": "serverless dynamodb install",
+    "postinstall": "serverless dynamodb install",
     "deploy-prod": "serverless --stage=production deploy"
   },
   "jest": {
